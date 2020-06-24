@@ -10,7 +10,7 @@ import "firebase/firestore";
 import * as firebaseui from 'firebaseui';
 
 // Document elements
-const startRsvpButton = document.getElementById('startRsvp');
+
 const guestbookContainer = document.getElementById('guestbook-container');
 
 const form = document.getElementById('leave-message');
@@ -24,9 +24,17 @@ var rsvpListener = null;
 var guestbookListener = null;
 
 // Add Firebase project configuration object here
-// var firebaseConfig = {};
+  var firebaseConfig = {
+    apiKey: "AIzaSyA_lIEOse2oFqB_ibAI_0__vN8dvCJl_p0",
+    authDomain: "fir-meetuppwa-codelab.firebaseapp.com",
+    databaseURL: "https://fir-meetuppwa-codelab.firebaseio.com",
+    projectId: "fir-meetuppwa-codelab",
+    storageBucket: "fir-meetuppwa-codelab.appspot.com",
+    messagingSenderId: "268437799300",
+    appId: "1:268437799300:web:8a51b86d3c18f03715ddd1"
+  };
 
-// firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 
 // FirebaseUI config
 const uiConfig = {
@@ -44,4 +52,12 @@ const uiConfig = {
   }
 };
 
-// const ui = new firebaseui.auth.AuthUI(firebase.auth());
+const ui = new firebaseui.auth.AuthUI(firebase.auth());
+
+const startRsvpButton = document.getElementById('startRsvp');
+startRsvpButton.addEventListener("click",
+ () => {
+      ui.start("#firebaseui-auth-container", uiConfig);
+});
+
+

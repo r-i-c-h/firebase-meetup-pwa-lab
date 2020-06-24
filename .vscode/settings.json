@@ -81,7 +81,7 @@
    * Control the cursor animation style, possible values are 'blink', 'smooth', 'phase', 'expand' and 'solid'.
    * Defaults to 'blink'.
    */
-  // "editor.cursorBlinking": "blink",
+  "editor.cursorBlinking": "blink",
   /**
    * Zoom the font in the editor when using the mouse wheel in combination with holding Ctrl.
    * Defaults to false.
@@ -91,16 +91,16 @@
    * Control the cursor style, either 'block' or 'line'.
    * Defaults to 'line'.
    */
-  // "editor.cursorStyle": "line",
+  "editor.cursorStyle": "block",
   /**
    * Control the width of the cursor when cursorStyle is set to 'line'
    */
-  // "editor.cursorWidth": 1,
+  "editor.cursorWidth": 3,
   /**
    * Enable font ligatures.
    * Defaults to false.
    */
-  // "editor.fontLigatures": false,
+  "editor.fontLigatures": true,
   /**
    * Disable the use of `will-change` for the editor margin and lines layers.
    * The usage of `will-change` acts as a hint for browsers to create an extra layer.
@@ -215,7 +215,7 @@
   /**
    * Enable inline color decorators and color picker rendering.
    */
-  // "editor.colorDecorators": true,
+  "editor.colorDecorators": true,
   /**
    * Enable custom contextmenu.
    * Defaults to true.
