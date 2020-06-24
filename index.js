@@ -71,10 +71,11 @@ if (user){
    startRsvpButton.textContent = "LOGOUT";
    // Show guestbook to logged-in users
    guestbookContainer.style.display = "block";
-     } else {
+   subscribeToGuestBook();
+  } else {
     startRsvpButton.textContent = "RSVP"
     guestbookContainer.style.display = "none";
-
+    unsubscribeToGuestbook();
   }
 });
 
@@ -95,16 +96,25 @@ form.addEventListener("submit", (e) => {
  return false;
 });
 
-firebase.firestore().collection("guestbook")
+function subscribeToGuestBook(){
+  const guestBookListener = firebase.firestore().collection("guestbook")
   .orderBy("timestamp","desc")
-  .onSnapshot((snaps) => {
+  .onSnapshot((snaps) => {      // returns an UNSUBSCRIBE function.
     // Reset page
     guestbook.innerHTML = "";
     // Loop through documents in database
     snaps.forEach((doc) => {
-      // Create an HTML entry for each document and add it to the chat
+      // Create an HTML entry for each document and add it to the DOM
       const entry = document.createElement("p");
       entry.textContent = doc.data().name + ": " + doc.data().text;
       guestbook.appendChild(entry);
     });
   });
+  }
+
+  function unsubscribeToGuestbook(){
+    if (guestbookListener != null) {
+      guestbookListener();
+      guestbookListener = null;
+    }
+  };
