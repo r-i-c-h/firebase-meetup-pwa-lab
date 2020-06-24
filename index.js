@@ -17,6 +17,7 @@ const startRsvpButton = document.getElementById("startRsvp");
 const form = document.getElementById("leave-message");
 const input = document.getElementById("message");
 const guestbook = document.getElementById("guestbook");
+
 const rsvpYes = document.getElementById("rsvp-yes");
 const rsvpNo = document.getElementById("rsvp-no");
 const numberAttending = document.getElementById("number-attending");
@@ -62,6 +63,13 @@ firebase.auth().onAuthStateChanged(user => {
     // Show guestbook to logged-in users
     guestbookContainer.style.display = "block";
     subscribeToGuestBook();
+    firebase.firestore().collection('attendees')
+      .where("attending", "==", true)
+      .onSnapshot(snap => {
+        const newAttendeeCount = snap.docs.length;
+        numberAttending.innerHTML = newAttendeeCount +' people going'; 
+    })
+    subscribeCurrentRSVP(user);
   } else {
     startRsvpButton.textContent = "RSVP";
     guestbookContainer.style.display = "none";
@@ -70,7 +78,7 @@ firebase.auth().onAuthStateChanged(user => {
 });
 
 function subscribeToGuestBook() {
-  guestBookListener = firebase
+  var guestBookListener = firebase
     .firestore()
     .collection("guestbook")
     .orderBy("timestamp", "desc")
@@ -95,6 +103,34 @@ function unsubscribeToGuestbook() {
   }
 }
 
+function subscribeCurrentRSVP(user){
+ let rsvpListener = firebase.firestore()
+ .collection('attendees')
+ .doc(user.uid)
+ .onSnapshot((doc) => {
+   if (doc && doc.data()){
+     const attendingResponse = doc.data().attending;
+     // Update css classes for buttons
+     if (attendingResponse){
+       rsvpYes.className="clicked";
+       rsvpNo.className="";
+     } else{
+       rsvpYes.className="";
+       rsvpNo.className="clicked";
+     }
+   }
+ });
+}
+
+function unsubscribeCurrentRSVP(){
+  if (rsvpListener != null) {
+    rsvpListener();
+    rsvpListener = null;
+  }
+  rsvpYes.className="";
+  rsvpNo.className="";
+}
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 startRsvpButton.addEventListener("click", e => {
   if (firebase.auth().currentUser) {
     // User is signed in; allows user to sign out
@@ -139,4 +175,3 @@ rsvpNo.addEventListener('click', () => {
    attending: false
  }).catch(console.error)
 });
-
