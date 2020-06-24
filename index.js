@@ -74,6 +74,7 @@ firebase.auth().onAuthStateChanged(user => {
     startRsvpButton.textContent = "RSVP";
     guestbookContainer.style.display = "none";
     unsubscribeToGuestbook();
+    unsubscribeCurrentRSVP();
   }
 });
 
