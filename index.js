@@ -27,8 +27,8 @@ var guestbookListener = null;
 
 // Add Firebase project configuration object here
 var firebaseConfig = {
-  apiKey: "AIzaSyA_lIEOse2oFqB_ibAI_0__vN8dvCJl_p0",
-  authDomain: "fir-meetuppwa-codelab.firebaseapp.com",
+  apiKey: "",
+  authDomain: "",
   databaseURL: "https://fir-meetuppwa-codelab.firebaseio.com",
   projectId: "fir-meetuppwa-codelab",
   storageBucket: "fir-meetuppwa-codelab.appspot.com",
