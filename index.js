@@ -12,6 +12,7 @@ import * as firebaseui from 'firebaseui';
 // Document elements
 
 const guestbookContainer = document.getElementById('guestbook-container');
+const startRsvpButton = document.getElementById('startRsvp');
 
 const form = document.getElementById('leave-message');
 const input = document.getElementById('message');
@@ -52,12 +53,44 @@ const uiConfig = {
   }
 };
 
+
 const ui = new firebaseui.auth.AuthUI(firebase.auth());
 
-const startRsvpButton = document.getElementById('startRsvp');
 startRsvpButton.addEventListener("click",
- () => {
-      ui.start("#firebaseui-auth-container", uiConfig);
+ (e) => {
+    if (firebase.auth().currentUser) {   // User is signed in; allows user to sign out
+      firebase.auth().signOut();
+    } else {
+      ui.start("#firebaseui-auth-container", uiConfig); // No user is signed in; allows user to sign in
+    }
 });
 
+// SUBSCRIBE to the CURRENT AUTH STATE
+firebase.auth().onAuthStateChanged((user)=> {
+if (user){
+   startRsvpButton.textContent = "LOGOUT";
+   // Show guestbook to logged-in users
+   guestbookContainer.style.display = "block";
+     } else {
+    startRsvpButton.textContent = "RSVP"
+    guestbookContainer.style.display = "none";
 
+  }
+});
+
+// Listen to the form submission
+form.addEventListener("submit", (e) => {
+ // Prevent the default form redirect
+ e.preventDefault();
+ // Write a new message to the database collection "guestbook"
+ firebase.firestore().collection("guestbook").add({
+   text: input.value,
+   timestamp: Date.now(),
+   name: firebase.auth().currentUser.displayName,
+   userId: firebase.auth().currentUser.uid
+ })
+ // clear message input field
+ input.value = ""; 
+ // Return false to avoid redirect
+ return false;
+});
